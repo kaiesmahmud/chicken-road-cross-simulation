@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ChickenRun — Crash Betting Game</title>
+    <link rel="stylesheet" href="main.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header id="header">
+      <div class="header-left">
+        <div class="logo">
+          <span class="logo-icon">🐔</span>
+          <span class="logo-text">Chicken<span class="accent">Run</span></span>
+        </div>
+      </div>
+      <div class="header-center">
+        <div id="phase-display" class="phase-badge">
+          <span class="phase-dot"></span>
+          <span id="phase-text">WAITING</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="balance-box">
+          <span class="balance-label">BALANCE</span>
+          <span id="balance-value" class="balance-value">1,000.00</span>
+        </div>
+      </div>
+    </header>
+
+    <main id="app">
+      <section id="game-section">
+        <div id="game-container">
+          <canvas id="game-canvas"></canvas>
+          <div id="game-overlay" class="game-overlay">
+            <div class="overlay-content">
+              <div id="overlay-icon" class="overlay-icon"></div>
+              <div id="overlay-title" class="overlay-title">
+                PLACE YOUR BETS
+              </div>
+              <div id="overlay-subtitle" class="overlay-subtitle">
+                Round starts in <span id="countdown">15</span>s
+              </div>
+            </div>
+          </div>
+          <div id="multiplier-display" class="multiplier-display hidden">
+            <span class="mult-label">CROSSING</span>
+            <span id="mult-value" class="mult-value">1.0x</span>
+          </div>
+          <div id="cashout-popup" class="cashout-popup hidden">
+            <div class="cashout-inner">
+              <span class="cashout-emoji">💰</span
+              ><span id="cashout-amount" class="cashout-amount">+500.00</span>
+            </div>
+          </div>
+          <div id="crash-popup" class="crash-popup hidden">
+            <div class="crash-inner">
+              <span class="crash-emoji">💥</span
+              ><span class="crash-text">CRASHED</span
+              ><span id="crash-at" class="crash-at">@ 2.0x</span>
+            </div>
+          </div>
+        </div>
+        <div class="history-strip">
+          <div id="history-items" class="history-items"></div>
+        </div>
+      </section>
+
+      <section id="bottom-panel">
+        <div class="panel betting-panel">
+          <div class="panel-header">
+            <span class="panel-title">PLACE BET</span>
+            <span id="round-number" class="round-num">Round #1</span>
+          </div>
+          <div class="bet-input-row">
+            <label class="bet-label">BET AMOUNT</label>
+            <div class="bet-input-wrap">
+              <span class="currency-icon">$</span>
+              <input
+                type="number"
+                id="bet-input"
+                class="bet-input"
+                value="100"
+                min="10"
+                step="10"
+              />
+            </div>
+          </div>
+          <div class="chips-row">
+            <button class="chip" data-value="50">
+              <svg class="chip-svg" viewBox="0 0 60 60">
+                <circle
+                  cx="30"
+                  cy="30"
+                  r="28"
+                  fill="#E74C3C"
+                  stroke="#fff"
+                  stroke-width="2"
+                />
+                <circle
+                  cx="30"
+                  cy="30"
+                  r="20"
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width="1"
+                  stroke-dasharray="4 3"
+                />
+                <text
+                  x="30"
+                  y="35"
+                  text-anchor="middle"
+                  fill="#fff"
+                  font-size="14"
+                  font-weight="bold"
+                >
+                  50
+                </text>
+              </svg>
+            </button>
+            <button class="chip" data-value="100">
+              <svg class="chip-svg" viewBox="0 0 60 60">
+                <circle
+                  cx="30"
+                  cy="30"
+                  r="28"
+                  fill="#3498DB"
+                  stroke="#fff"
+                  stroke-width="2"
+                />
+                <circle
+                  cx="30"
+                  cy="30"
+                  r="20"
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width="1"
+                  stroke-dasharray="4 3"
+                />
+                <text
+                  x="30"
+                  y="35"
+                  text-anchor="middle"
+                  fill="#fff"
+                  font-size="14"
+                  font-weight="bold"
+                >
+                  100
+                </text>
+              </svg>
+            </button>
+            <button class="chip" data-value="500">
+              <svg class="chip-svg" viewBox="0 0 60 60">
+                <circle
+                  cx="30"
+                  cy="30"
+                  r="28"
+                  fill="#2ECC71"
+                  stroke="#fff"
+                  stroke-width="2"
+                />
+                <circle
+                  cx="30"
+                  cy="30"
+                  r="20"
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width="1"
+                  stroke-dasharray="4 3"
+                />
+                <text
+                  x="30"
+                  y="35"
+                  text-anchor="middle"
+                  fill="#fff"
+                  font-size="14"
+                  font-weight="bold"
+                >
+                  500
+                </text>
+              </svg>
+            </button>
+            <button class="chip" data-value="1000">
+              <svg class="chip-svg" viewBox="0 0 60 60">
+                <circle
+                  cx="30"
+                  cy="30"
+                  r="28"
+                  fill="#F39C12"
+                  stroke="#fff"
+                  stroke-width="2"
+                />
+                <circle
+                  cx="30"
+                  cy="30"
+                  r="20"
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width="1"
+                  stroke-dasharray="4 3"
+                />
+                <text
+                  x="30"
+                  y="35"
+                  text-anchor="middle"
+                  fill="#fff"
+                  font-size="14"
+                  font-weight="bold"
+                >
+                  1K
+                </text>
+              </svg>
+            </button>
+          </div>
+          <div class="quick-row">
+            <button class="quick-btn" data-action="half">½</button>
+            <button class="quick-btn" data-action="double">2×</button>
+            <button class="quick-btn" data-action="max">MAX</button>
+            <button class="quick-btn" data-action="clear">CLR</button>
+          </div>
+          <button id="action-btn" class="action-btn bet-btn">
+            <span id="action-text">PLACE BET</span>
+          </button>
+        </div>
+
+        <div class="panel live-bets-panel">
+          <div class="panel-header">
+            <span class="panel-title">LIVE BETS</span>
+            <span id="players-count" class="players-count">0 players</span>
+          </div>
+          <div class="table-scroll">
+            <table class="live-table">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Bet</th>
+                  <th>Mult.</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="live-bets-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="stats-section">
+        <div class="panel stats-panel">
+          <div class="panel-header">
+            <span class="panel-title">YOUR STATS</span>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">Total Bet</span
+              ><span id="stat-total-bet" class="stat-value">$0</span>
+            </div>
+            <div class="stat-card win">
+              <span class="stat-label">Total Won</span
+              ><span id="stat-total-win" class="stat-value">$0</span>
+            </div>
+            <div class="stat-card loss">
+              <span class="stat-label">Total Lost</span
+              ><span id="stat-total-loss" class="stat-value">$0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Net P/L</span
+              ><span id="stat-net" class="stat-value">$0</span>
+            </div>
+          </div>
+        </div>
+        <div class="panel stats-panel">
+          <div class="panel-header">
+            <span class="panel-title">PLATFORM STATS</span
+            ><span class="panel-tag">SIM</span>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">Pot (Round)</span
+              ><span id="stat-pot" class="stat-value">$0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Payout Pool</span
+              ><span id="stat-pool" class="stat-value">$0</span>
+            </div>
+            <div class="stat-card win">
+              <span class="stat-label">Platform Profit</span
+              ><span id="stat-platform-profit" class="stat-value">$0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Provider Fee</span
+              ><span id="stat-provider-fee" class="stat-value">$0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Rollover</span
+              ><span id="stat-rollover" class="stat-value">$0</span>
+            </div>
+            <div class="stat-card loss">
+              <span class="stat-label">Bonus Income</span
+              ><span id="stat-bonus" class="stat-value">$0</span>
+            </div>
+          </div>
+        </div>
+        <div class="bottom-actions">
+          <button id="add-balance-btn" class="action-bottom-btn add-btn">
+            💵 Add $1,000 Balance
+          </button>
+          <button id="reset-btn" class="action-bottom-btn reset-btn">
+            🗑️ Reset All Data
+          </button>
+        </div>
+      </section>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
