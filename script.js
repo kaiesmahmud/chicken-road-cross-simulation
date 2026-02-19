@@ -286,10 +286,10 @@ function calcCrashLane(bots, realBet) {
     // Bot payouts at this lane
     let lanePayout = 0;
     bots.forEach((b) => {
-      if (b.targetLane === lane) lanePayout += b.betAmount * (1 + mult);
+      if (b.targetLane === lane) lanePayout += b.betAmount * mult;
     });
     // Worst case: real user also cashes here
-    const realWorst = realBet > 0 ? realBet * (1 + mult) : 0;
+    const realWorst = realBet > 0 ? realBet * mult : 0;
 
     if (poolLeft - lanePayout - realWorst < 0) {
       crashLane = lane;
@@ -949,7 +949,7 @@ async function phasePlaying() {
       "mult-value" + (mult >= 3 ? " danger" : mult >= 2 ? " high" : "");
 
     if (ST.hasBet && !ST.cashedOut) {
-      DOM.actionText.textContent = `CASHOUT $${fmt(ST.bet * (1 + mult))}`;
+      DOM.actionText.textContent = `CASHOUT $${fmt(ST.bet * mult)}`;
     }
 
     // ── PREPARE LANE ──
@@ -1003,7 +1003,7 @@ async function phasePlaying() {
       if (b.status === "waiting" && b.targetLane <= lane) {
         b.status = "cashed";
         b.cashoutMult = mult;
-        b.cashoutAmount = b.betAmount * (1 + mult);
+        b.cashoutAmount = b.betAmount * mult;
       }
     });
     updateTable();
@@ -1049,14 +1049,14 @@ function doFinish() {
     if (b.status === "waiting") {
       b.status = "cashed";
       b.cashoutMult = LANE_MULTS[LANE_COUNT - 1];
-      b.cashoutAmount = b.betAmount * (1 + LANE_MULTS[LANE_COUNT - 1]);
+      b.cashoutAmount = b.betAmount * LANE_MULTS[LANE_COUNT - 1];
     }
   });
   // If user still riding, they win at 4x
   if (ST.hasBet && !ST.cashedOut) {
     ST.cashedOut = true;
     ST.cashoutMult = LANE_MULTS[LANE_COUNT - 1];
-    ST.cashoutAmount = ST.bet * (1 + ST.cashoutMult);
+    ST.cashoutAmount = ST.bet * ST.cashoutMult;
     ST.balance += ST.cashoutAmount;
     ST.totalWin += ST.cashoutAmount;
     DOM.cashoutPopup.classList.remove("hidden");
@@ -1114,7 +1114,7 @@ function cashout() {
   ST.cashedOut = true;
   ST.cashoutLane = lane;
   ST.cashoutMult = mult;
-  ST.cashoutAmount = ST.bet * (1 + mult);
+  ST.cashoutAmount = ST.bet * mult;
   ST.balance += ST.cashoutAmount;
   ST.totalWin += ST.cashoutAmount;
 
